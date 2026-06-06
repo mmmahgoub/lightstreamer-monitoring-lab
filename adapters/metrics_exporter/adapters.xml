@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!-- Mandatory. Define an Adapter Set and sets its unique ID. -->
+<adapters_conf id="METRICS">
+
+    <metadata_provider>
+
+        <adapter_class>com.lightstreamer.utility.MetricsExportMetadataAdapter</adapter_class>
+
+        <param name="metrics_port">9100</param>
+
+    </metadata_provider>
+
+    <data_provider name="NothingToDo">
+
+        <adapter_class>com.lightstreamer.utility.NTDDataAdapter</adapter_class>
+
+    </data_provider>
+
+</adapters_conf>

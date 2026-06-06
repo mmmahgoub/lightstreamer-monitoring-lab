@@ -1,0 +1,38 @@
+services:
+  lightstreamer:
+    image: lightstreamer:latest
+    container_name: lightstreamer
+    ports:
+      - "8080:8080" # Lightstreamer HTTP Engine
+      - "9100:9100" # Exporter Scraper Port
+    volumes:
+      # Mount the plugin definition straight into the server's runtime loop
+      - ./adapters/metrics_exporter:/lightstreamer/adapters/metrics_exporter
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - lightstreamer
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    restart: unless-stopped
+    depends_on:
+      - prometheus
