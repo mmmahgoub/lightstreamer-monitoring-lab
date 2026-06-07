@@ -1,5 +1,7 @@
 # Lightstreamer Monitoring Lab
 
+Repository: https://github.com/mmmahgoub/lightstreamer-monitoring-lab.git
+
 A Docker-based Lightstreamer monitoring stack with Prometheus and Grafana.
 This repository runs Lightstreamer with a Prometheus Metrics Exporter adapter, scrapes exporter metrics, and provisions a Grafana dashboard for Lightstreamer visibility.
 
@@ -34,6 +36,72 @@ This starts:
 - Lightstreamer on `http://localhost:8080`
 - Prometheus on `http://localhost:9090`
 - Grafana on `http://localhost:3000`
+
+## Minikube deployment
+
+This repository includes Kubernetes manifests under `k8s/` for Minikube.
+
+Use the helper script to deploy the stack:
+
+```bash
+./minikube-deploy.sh
+```
+
+To deploy and mount the repository automatically in the background:
+
+```bash
+./minikube-deploy.sh --mount
+```
+
+To remove the resources, use:
+
+```bash
+./minikube-cleanup.sh
+```
+
+The deploy script will:
+
+- start Minikube if needed
+- load the `lightstreamer:latest` image into Minikube
+- apply the Kubernetes manifests
+
+After deployment, mount the repository into Minikube in another terminal:
+
+```bash
+cd /home/dx/github/lightstreamer-monitoring-lab
+minikube mount "$(pwd)":/mnt/repo
+```
+
+Alternatively, run the mount in the background:
+
+```bash
+nohup minikube mount "$(pwd)":/mnt/repo >/tmp/minikube-mount.log 2>&1 &
+```
+
+If you use a different image name, update `k8s/lightstreamer.yaml` accordingly.
+
+Service URLs:
+
+```bash
+minikube service grafana --url
+minikube service prometheus --url
+minikube service lightstreamer --url
+```
+
+If `minikube service ... --url` does not return a URL, use the Minikube node IP plus the NodePort directly:
+
+```bash
+minikube ip
+kubectl get svc grafana -o jsonpath='{.spec.ports[0].nodePort}'
+```
+
+Then open `http://<minikube-ip>:<nodePort>` in your browser.
+
+Notes:
+
+- Lightstreamer mounts its adapter directory from `/mnt/repo/adapters/metrics_exporter` inside Minikube.
+- Grafana mounts provisioning and dashboard files from `/mnt/repo/grafana`.
+- Grafana admin password remains `admin`.
 
 ## Grafana
 

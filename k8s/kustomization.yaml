@@ -1,0 +1,4 @@
+resources:
+  - lightstreamer.yaml
+  - prometheus.yaml
+  - grafana.yaml
