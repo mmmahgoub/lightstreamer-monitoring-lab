@@ -43,21 +43,21 @@ This repository includes Kubernetes manifests under `k8s/` for Minikube.
 
 Use the helper script to deploy the stack:
 
-```bash
+
 ./minikube-deploy.sh
-```
+
 
 To deploy and mount the repository automatically in the background:
 
-```bash
+
 ./minikube-deploy.sh --mount
-```
+
 
 To remove the resources, use:
 
-```bash
+
 ./minikube-cleanup.sh
-```
+
 
 The deploy script will:
 
@@ -67,33 +67,33 @@ The deploy script will:
 
 After deployment, mount the repository into Minikube in another terminal:
 
-```bash
-cd /home/dx/github/lightstreamer-monitoring-lab
+
+cd /<home_directory>/lightstreamer-monitoring-lab
 minikube mount "$(pwd)":/mnt/repo
-```
+
 
 Alternatively, run the mount in the background:
 
-```bash
+
 nohup minikube mount "$(pwd)":/mnt/repo >/tmp/minikube-mount.log 2>&1 &
-```
+
 
 If you use a different image name, update `k8s/lightstreamer.yaml` accordingly.
 
 Service URLs:
 
-```bash
+
 minikube service grafana --url
 minikube service prometheus --url
 minikube service lightstreamer --url
-```
+
 
 If `minikube service ... --url` does not return a URL, use the Minikube node IP plus the NodePort directly:
 
-```bash
+
 minikube ip
 kubectl get svc grafana -o jsonpath='{.spec.ports[0].nodePort}'
-```
+
 
 Then open `http://<minikube-ip>:<nodePort>` in your browser.
 
