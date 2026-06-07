@@ -68,7 +68,7 @@ The deploy script will:
 After deployment, mount the repository into Minikube in another terminal:
 
 
-cd /home_directory/lightstreamer-monitoring-lab
+cd /home/mm/github/lightstreamer-monitoring-lab
 minikube mount "$(pwd)":/mnt/repo
 
 
