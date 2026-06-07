@@ -59,6 +59,25 @@ To remove the resources, use:
 ./minikube-cleanup.sh
 
 
+## Terraform deployment
+
+A Terraform deployment is available under `terraform/` to create the same Minikube resources.
+
+Use the root helper script:
+
+
+./terraform-deploy.sh apply
+
+
+To destroy the Terraform-managed resources:
+
+
+./terraform-deploy.sh destroy
+
+
+For more details, see `terraform/README.md`.
+
+
 The deploy script will:
 
 - start Minikube if needed
