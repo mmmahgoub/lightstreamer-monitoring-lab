@@ -13,9 +13,11 @@ provider "kubernetes" {
   config_path = var.kubeconfig
 }
 
-resource "kubernetes_service" "lightstreamer" {
+# FIXED: Changed from deployment to service, and upgraded to _v1
+resource "kubernetes_service_v1" "lightstreamer" {
   metadata {
-    name = "lightstreamer"
+    name      = "lightstreamer"
+    namespace = "default"
   }
 
   spec {
@@ -26,24 +28,26 @@ resource "kubernetes_service" "lightstreamer" {
     type = "NodePort"
 
     port {
-      name       = "http"
-      port       = 8080
+      name        = "http"
+      port        = 8080
       target_port = 8080
-      node_port  = 30080
+      node_port   = 30080
     }
 
     port {
-      name       = "exporter"
-      port       = 9100
+      name        = "exporter"
+      port        = 9100
       target_port = 9100
-      node_port  = 31010
+      node_port   = 31010
     }
   }
 }
 
-resource "kubernetes_deployment" "lightstreamer" {
+# FIXED: Cleaned and upgraded to _v1 to prevent identity errors
+resource "kubernetes_deployment_v1" "lightstreamer" {
   metadata {
-    name = "lightstreamer"
+    name      = "lightstreamer"
+    namespace = "default"
   }
 
   spec {
@@ -64,8 +68,8 @@ resource "kubernetes_deployment" "lightstreamer" {
 
       spec {
         container {
-          name  = "lightstreamer"
-          image = "lightstreamer:latest"
+          name              = "lightstreamer"
+          image             = "lightstreamer:latest"
           image_pull_policy = "IfNotPresent"
 
           port {
@@ -126,10 +130,10 @@ resource "kubernetes_service" "prometheus" {
     type = "NodePort"
 
     port {
-      name       = "web"
-      port       = 9090
+      name        = "web"
+      port        = 9090
       target_port = 9090
-      node_port  = 30090
+      node_port   = 30090
     }
   }
 }
@@ -205,10 +209,10 @@ resource "kubernetes_service" "grafana" {
     type = "NodePort"
 
     port {
-      name       = "web"
-      port       = 3000
+      name        = "web"
+      port        = 3000
       target_port = 3000
-      node_port  = 30030
+      node_port   = 30030
     }
   }
 }
